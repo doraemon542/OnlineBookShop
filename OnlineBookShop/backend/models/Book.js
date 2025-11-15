@@ -4,10 +4,13 @@ const bookSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     author: { type: String, required: true },
-    coverImage: { type: String },
     description: { type: String },
     category: { type: String },
-    isPremium: { type: Boolean, default: false }, // Premium books for subscribed users
+    isPremium: { type: Boolean, default: false },
+    coverImage: { type: String },
+
+    // 🔥 THIS is the important field
+    pdfFile: { type: String, required: true }
   },
   { timestamps: true }
 );

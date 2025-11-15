@@ -1,29 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
 
 export default function Home() {
-  const featuredBooks = [
-    {
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      img: "https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      title: "1984",
-      author: "George Orwell",
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV4yWihrnwBCaQNXCMF_zSIAPDMidcLtnR3g&s",
-    },
-    {
-      title: "Harry Potter",
-      author: "J.K. Rowling",
-      img: "https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80",
-    },
-  ];
+  const [books, setBooks] = useState([]);
+
+  // ✅ fetch all books from backend
+  useEffect(() => {
+    fetch("http://localhost:8070/api/books")
+      .then((res) => res.json())
+      .then((data) => setBooks(data))
+      .catch((err) => console.error("Error fetching books:", err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
@@ -37,7 +24,10 @@ export default function Home() {
             Join <span className="font-semibold">BookNest</span> and explore thousands of books with one subscription. 
             Read online without downloads — anytime, anywhere.
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+          <button
+            onClick={() => window.location.href = "/library"}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
             Explore Library
           </button>
         </div>
@@ -51,16 +41,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Books */}
+      {/* Featured Books from MongoDB */}
       <section className="px-6 md:px-16 py-12">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">
           Featured Books
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {featuredBooks.map((book, index) => (
-            <BookCard key={index} book={book} isSubscribed={false} />
-          ))}
-        </div>
+
+        {books.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {books.slice(0, 4).map((book) => (
+              <BookCard key={book._id} book={book} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 text-lg">Loading books...</p>
+        )}
       </section>
 
       {/* Subscription CTA */}
@@ -69,7 +64,10 @@ export default function Home() {
         <p className="mb-6 text-lg">
           Subscribe now and unlock our entire online library.
         </p>
-        <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+        <button
+          onClick={() => window.location.href = "/plans"}
+          className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+        >
           View Plans
         </button>
       </section>

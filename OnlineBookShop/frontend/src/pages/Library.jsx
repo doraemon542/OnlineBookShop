@@ -1,25 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
 
 export default function Library() {
-  const books = [
-    { title: "The Alchemist", author: "Paulo Coelho", category: "Fiction", img: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=500&q=80" },
-    { title: "The Hobbit", author: "J.R.R. Tolkien", category: "Fantasy", img: "https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=500&q=80" },
-    { title: "Pride and Prejudice", author: "Jane Austen", category: "Romance", img: "https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=500&q=80" },
-    { title: "Sapiens", author: "Yuval Noah Harari", category: "History", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80" },
-  ];
-
+  const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
 
-  const isSubscribed = false; // ধরো user এখনো subscription নেয়নি
+  // ✅ Fetch all books from backend
+  useEffect(() => {
+    fetch("http://localhost:8070/api/books")
+      .then((res) => res.json())
+      .then((data) => {
+        setBooks(data);
+        setLoading(false);
+      })
+      .catch((err) => console.error("Error fetching books:", err));
+  }, []);
 
   const filteredBooks = books.filter((book) => {
     const matchesSearch =
       book.title.toLowerCase().includes(search.toLowerCase()) ||
       book.author.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory =
-      category === "All" || book.category === category;
+    const matchesCategory = category === "All" || book.category === category;
     return matchesSearch && matchesCategory;
   });
 
@@ -45,6 +48,7 @@ export default function Library() {
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="All">All Categories</option>
+          <option value="Classic">Classic</option>
           <option value="Fiction">Fiction</option>
           <option value="Fantasy">Fantasy</option>
           <option value="Romance">Romance</option>
@@ -53,10 +57,12 @@ export default function Library() {
       </div>
 
       {/* Books Grid */}
-      {filteredBooks.length > 0 ? (
+      {loading ? (
+        <p className="text-center text-gray-500 text-lg">Loading books...</p>
+      ) : filteredBooks.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {filteredBooks.map((book, index) => (
-            <BookCard key={index} book={book} isSubscribed={isSubscribed} />
+          {filteredBooks.map((book) => (
+            <BookCard key={book._id} book={book} />
           ))}
         </div>
       ) : (

@@ -5,7 +5,7 @@ const subscriptionSchema = new mongoose.Schema(
     planName: { type: String, required: true },
     price: { type: Number, required: true },
     duration: { type: Number, required: true }, // in days
-    features: [{ type: String }],
+     bookLimit: { type: Number, required: true },
   },
   { timestamps: true }
 );

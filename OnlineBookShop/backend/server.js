@@ -14,6 +14,7 @@ connectDB();
 
 const app = express();
 app.use(cors());
+
 app.use(express.json());
 
 app.use("/api/books", bookRoutes);
@@ -24,5 +25,5 @@ app.get("/", (req, res) => {
   res.send("📚 Welcome to the Online Book Library API");
 });
 
-const PORT = process.env.PORT || 8070;
+const PORT = process.env.PORT || 8050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,43 +1,48 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function BookCard({ book, user }) {
+export default function BookCard({ book }) {
   const navigate = useNavigate();
 
   const handleReadClick = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    // 1️⃣ User not logged in
     if (!user) {
-      // user not logged in
-      navigate("/login");
-    } else if (!user.subscription) {
-      // user logged in but not subscribed
-      navigate("/plans");
-    } else {
-      // user logged in and subscribed
-      navigate(`/read/${book._id}`); // example: open book reader page
+      alert("Please log in to read this book!");
+      return navigate("/login");
     }
+
+    // 2️⃣ Extract planName safely
+    const planName = user.subscription?.planName || null;
+
+    // 3️⃣ If NO subscription → block
+    if (!planName) {
+      alert("You need a subscription to read books.");
+      return navigate("/plans");
+    }
+
+    // 4️⃣ User has a subscription → allow reading
+    const pdfUrl = `http://localhost:8070/api/books/read/${book._id}?userId=${user._id}`;
+    window.open(pdfUrl, "_blank");
   };
 
-  const isSubscribed = !!(user && user.subscription);
-
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1 p-5">
+    <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition-all">
       <img
-        src={book.img}
+        src={book.coverImage || "https://via.placeholder.com/300x400?text=No+Cover"}
         alt={book.title}
-        className="w-full h-60 object-cover rounded-xl mb-4"
+        className="w-full h-56 object-cover rounded-lg mb-3"
       />
-      <h3 className="text-xl font-semibold text-gray-800 mb-1">{book.title}</h3>
-      <p className="text-gray-500 text-sm mb-4 italic">by {book.author}</p>
+
+      <h3 className="text-lg font-semibold">{book.title}</h3>
+      <p className="text-gray-500 mb-3">{book.author}</p>
 
       <button
         onClick={handleReadClick}
-        className={`w-full px-4 py-2.5 rounded-lg font-medium transition-all duration-200 ${
-          isSubscribed
-            ? "bg-blue-600 text-white hover:bg-blue-700 hover:scale-105"
-            : "bg-gray-300 text-gray-700 hover:scale-105"
-        }`}
+        className="px-4 py-2 rounded-md text-white font-semibold bg-blue-600 hover:bg-blue-700"
       >
-        {isSubscribed ? "Read Now 📖" : "Subscribe to Read 🔒"}
+        Read
       </button>
     </div>
   );

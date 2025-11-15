@@ -1,3 +1,4 @@
+// models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -5,10 +6,12 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+
     subscription: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subscription",
-      default: null,
+      planName: { type: String, default: null },
+      startDate: { type: Date },
+      endDate: { type: Date },
+      remainingBooks: { type: Number, default: 0 },
     },
   },
   { timestamps: true }
