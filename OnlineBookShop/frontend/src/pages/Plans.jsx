@@ -1,4 +1,5 @@
 import React from "react";
+import { API_BASE } from "../config/api";
 
 export default function Plans() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -48,7 +49,7 @@ export default function Plans() {
     }
 
     try {
-      const res = await fetch("http://localhost:8070/api/subscriptions/subscribe", {
+      const res = await fetch(`${API_BASE}/subscriptions/subscribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user._id, planName }),

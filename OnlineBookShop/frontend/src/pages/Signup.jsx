@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../config/api";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8070/api/users/signup",
+        `${API_BASE}/users/signup`,
         formData
       );
 

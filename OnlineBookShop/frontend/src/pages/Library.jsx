@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
+import { API_BASE } from "../config/api";
 
 export default function Library() {
   const [books, setBooks] = useState([]);
@@ -7,9 +8,11 @@ export default function Library() {
   const [category, setCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
+  
+
   // ✅ Fetch all books from backend
   useEffect(() => {
-    fetch("http://localhost:8070/api/books")
+    fetch(`${API_BASE}/books`)
       .then((res) => res.json())
       .then((data) => {
         setBooks(data);

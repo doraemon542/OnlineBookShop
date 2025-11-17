@@ -41,7 +41,17 @@ npm install
 
 ---
 
-## ▶ 3. Run the Project
+### 🔐 3. Environment Variables (Important)
+
+Create a .env file inside your backend folder:
+
+MONGO_URI=mongodb+srv://<Your user name>:<Your Password>@cluster0.34m5eik.mongodb.net/?appName=Cluster0
+PORT=8070
+
+✔ MONGO_URI → Your MongoDB Atlas connection
+✔ PORT → Backend server port
+
+## ▶ 4. Run the Project
 
 After installing dependencies:
 
@@ -81,6 +91,19 @@ OnlineBookShop/
 ```
 
 ---
+
+### 🛠 Node.js Version
+
+This project uses:
+
+Node.js v24.11.0
+
+Make sure your system is using this version (or higher):
+
+```bash
+node -v
+
+```
 
 ## 💡 Notes
 

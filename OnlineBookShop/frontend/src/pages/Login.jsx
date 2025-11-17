@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../config/api";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -14,12 +15,13 @@ export default function Login() {
    const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8070/api/users/login", formData);
+      const res = await axios.post(`${API_BASE}/users/login`, formData);
       setMessage(res.data.message);
 
       
       // ✅ user info localStorage-এ save করা
       localStorage.setItem("user", JSON.stringify(res.data.user));
+
 
       // ✅ ১ সেকেন্ড পর Home page-এ নিয়ে যাও
       setTimeout(() => navigate("/"), 100);

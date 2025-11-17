@@ -1,2 +1,4 @@
 node_modules/
 .env
+uploadBooks.js
+books/
